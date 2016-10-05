@@ -12,6 +12,8 @@ const gulp = require("gulp"),
     watch = require('gulp-watch'),
     ngAnnotate = require('gulp-ng-annotate'),
     closure = require('gulp-jsclosure'),
+    connect = require('gulp-connect'),
+    browserify = require('gulp-browserify'),
     p = require('path'),
     wiredep = require('wiredep').stream;
 
@@ -24,8 +26,7 @@ const paths = {
     ngRoute: webroot + "modules/**/*.route.js",
     ngController: webroot + "modules/**/*.controller.js",
     script: webroot + "assets/scripts/**/*.js",
-    style: webroot + "assets/styles/**/*.css",
-    minDist: webroot + "dist/*.min.js"
+    style: webroot + "assets/styles/**/*.css"
 };
 
 const moduleSrc = gulp.src(paths.ngModule, { read: false });
@@ -55,45 +56,37 @@ gulp.task('compile-js', ['empty-dist'], function() {
     .pipe(gulp.dest(webroot + 'dist/'))
 });
 
-gulp.task('build:dev', ['compile-js'], function () {
+gulp.task('build', ['compile-js'], function () {
     gulp.src(webroot + 'index.html')
         .pipe(wiredep({
             optional: 'configuration',
             goes: 'here',
             ignorePath: '..'
         }))
-        .pipe(inject(series(moduleSrc, routeSrc, controllerSrc, scriptSrc), { ignorePath: '/wwwroot' }))
-        .pipe(inject(series(styleSrc), { ignorePath: '/wwwroot' }))
+        .pipe(inject(series(moduleSrc, routeSrc, controllerSrc, scriptSrc), { ignorePath: '/app' }))
+        .pipe(inject(series(styleSrc), { ignorePath: '/app'  }))
         .pipe(gulp.dest(webroot));
 });
 
 
 // Task For Minify files 
+// Browserify task
+gulp.task('browserify', ['build'], function() {
+  // Single point of entry (make sure not to src ALL your files, browserify will figure it out for you)
+  gulp.src(['app/modules/app.module.js'])
+  .pipe(browserify({
+    insertGlobals: true,
+    debug: true
+  }))
 
-gulp.task('compile-js-prod', ['empty-dist'], function() {
-  gulp.src([paths.ngModule, paths.ngRoute, paths.ngController])
-     .pipe(concat('app.js'))
-     .pipe(closure({angular: true}))
-     .pipe(ngAnnotate({ add: true, single_quotes: true })).on('error', handleError)
-     .pipe(gulp.dest(webroot + 'dist'))
-     .pipe(uglify({mangle: false}))
-     .pipe(rename('main.min.js'))
-     .pipe(gulp.dest(webroot + 'dist'))
 });
 
-gulp.task('build:prod', ['compile-js-prod'], function () {
-    const minDist = gulp.src(paths.minDist, { read: false }, {relative: true});
-    const scriptSrc = gulp.src(paths.script, { read: false });
-    const styleSrc = gulp.src(paths.style, { read: false });
-    console.log(paths.script);
-    gulp.src(webroot + 'app/index.html')
-        .pipe(wiredep({
-            optional: 'configuration',
-            goes: 'here',
-            ignorePath: '..'
-        }))
-        .pipe(inject(series(scriptSrc, minDist), { ignorePath: webroot }))
-        .pipe(inject(series(styleSrc), { ignorePath: webroot }))
-        .pipe(gulp.dest(webroot));
+
+gulp.task('serve', ['build'], function () {
+  connect.server({
+    proxy: "http://localhost:10010",
+    root: './app/',
+    port: 8888
+  });
 });
 

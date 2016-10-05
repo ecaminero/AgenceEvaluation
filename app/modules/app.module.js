@@ -1,13 +1,13 @@
-﻿(function () {
+(function () {
     'use strict';
 
     angular
-        .module('app', ['app.core', 'app.home', 'app.notification'])
+        .module('app', ['app.core', 'app.home'])
         .config(function ($httpProvider) {
             $httpProvider.defaults.headers.post["Content-Type"] = "application/json";
         })
         .run(function ($rootScope, $state) {
-            $state.go('notification');
+            $state.go('home');
         });
 
 })();

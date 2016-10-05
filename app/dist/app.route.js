@@ -1,6 +1,8 @@
+;(function(angular) {
 (function() {
   'use strict';
 
+  uiRouterConfig.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider'];
   angular
       .module('app')
       .config(uiRouterConfig);
@@ -12,9 +14,11 @@
     $stateProvider
         .state('home', {
           url: '/',
-          templateUrl: 'app/home/home.html',
+          templateUrl: 'modules/home/home.html',
           controller: 'homeController',
           controllerAs: 'homeCtrl',
       })
   }
 })();
+
+})(angular);

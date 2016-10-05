@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 
-<head>
+<head ng-app="app">
   <base href="/">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,7 +17,7 @@
 
 </head>
 
-<body class="" ng-app="app">
+<body class="" >
   <ui-view></ui-view>
   <footer>
     <!-- bower:js -->
@@ -26,9 +26,11 @@
     <!-- endbower -->
 
     <!-- inject:js -->
-    <script src="/app/modules/core/core.module.js"></script>
-    <script src="/app/modules/home/home.module.js"></script>
-    <script src="/app/modules/home/home.controller.js"></script>
+    <script src="/modules/app.module.js"></script>
+    <script src="/modules/core/core.module.js"></script>
+    <script src="/modules/home/home.module.js"></script>
+    <script src="/modules/app.route.js"></script>
+    <script src="/modules/home/home.controller.js"></script>
     <!-- endinject -->
   </footer>
 </body>
