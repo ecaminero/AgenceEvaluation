@@ -2,33 +2,31 @@
 //Include crypto to generate the movie id
 var crypto = require('crypto');
 var connection = require('./connection');
-
+const _ = require('lodash');
 
 module.exports = function () {
 	return {
 		movieList: [],
-		/*
-		 * Save the movie inside the "db".
-		 */
+
 		save(movie) {
 			movie.id = crypto.randomBytes(20).toString('hex'); // fast enough for our purpose
 			return 1;
 		},
 		/*
-		 * Retrieve a movie with a given id or return all the movies if the id is undefined.
+		 * Find all users in cao_usuario 
 		 */
 		find() {
-				 return new Promise(function (resolve, reject) {
-					const query = "SELECT * FROM cao_usuario as cu INNER JOIN permissao_sistema AS ps ON ps.co_usuario = cu.co_usuario WHERE ps.co_sistema=1 and ps.in_ativo = 'S' and ps.co_tipo_usuario in (0,1,2);";
-					connection.query(query, function (err, rows) {
-						if (err) { return reject(err); }
-						resolve(rows);
-					});
+			return new Promise(function (resolve, reject) {
+				const query = `SELECT * FROM cao_usuario as cu 
+					INNER JOIN permissao_sistema AS ps ON ps.co_usuario = cu.co_usuario 
+					WHERE ps.co_sistema=1 and ps.in_ativo = 'S' and ps.co_tipo_usuario in (0,1,2);`;
+
+				connection.query(query, function (err, rows) {
+					if (err) { return reject(err); }
+					resolve(rows);
 				});
+			});
 		},
-		/*
-		 * Delete a movie with the given id.
-		 */
 		remove(id) {
 			var found = 0;
 			this.movieList = this.movieList.filter(element => {
@@ -40,9 +38,6 @@ module.exports = function () {
 			});
 			return found;
 		},
-		/*
-		 * Update a movie with the given id
-		 */
 		update(id, movie) {
 			var movieIndex = this.movieList.findIndex(element => {
 				return element.id === id;
@@ -54,6 +49,24 @@ module.exports = function () {
 			} else {
 				return 0;
 			}
+		},
+		earnings(users, monthstart, monthend) {
+			return new Promise(function (resolve, reject) {
+				const query = `SELECT SUM(ca.valor - (ca.valor*(ca.total_imp_inc/100))) as receita_liquida, os.co_usuario,
+						month(ca.data_emissao) as month_id, sa.brut_salario
+						FROM cao_fatura as ca
+						RIGHT OUTER JOIN cao_os AS os ON ca.co_os = os.co_os 
+						RIGHT OUTER JOIN cao_salario AS sa ON sa.co_usuario = os.co_usuario
+						WHERE os.co_usuario in ("`+users.join('" ,"')+`")
+						and (ca.data_emissao BETWEEN "${monthstart}" AND "${monthend}")
+						GROUP BY month(ca.data_emissao), sa.brut_salario, os.co_usuario;`;
+				connection.query(query, function (err, rows) {
+					if (err) { return reject(err); }
+					resolve(rows);
+				});
+			});
 		}
 	}
-};  
+}; 
+
+

@@ -188,8 +188,16 @@ definitions:
         items: 
           type: string
         description: Id users
+      monthStart:
+        type: string
+        description: Month
+      monthEnd:
+        type: string
+        description: Month
     required:
       - consultants
+      - monthStart
+      - monthEnd
   GeneralResponse:
     type: object
     properties:

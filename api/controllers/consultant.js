@@ -48,8 +48,12 @@ function delMovie(req, res, next) {
 
 //POST /consultant/earnings operationId
 function getEarning(req, res, next) {
-	db.find().then(function(values) {
-		res.json({ data: values });
+	var consultants = req.body.consultants;
+	var monthstart = req.body.monthStart;
+	var monthend = req.body.monthEnd;
+	db.earnings(consultants, monthstart, monthend).then(function(response) {
+		console.log(response);
+		res.json({ data: response });
 	});
 	
 }
