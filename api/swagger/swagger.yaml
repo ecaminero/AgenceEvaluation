@@ -54,13 +54,20 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /consultant/earning:
+  /consultant/earnings:
     # our controller name
     x-swagger-router-controller: consultant
-    get:
-      operationId: getAll
-      description: get the movies list
-      # define the type of response for Success "200" and Error
+    post:
+      operationId: getEarning
+      description: get earnings by consultants
+      # movie info to be stored
+      parameters:
+        - name: consultants
+          description: Get earnings by co_usuario
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/CaoUser"
       responses:
         "200":
           description: Success
@@ -69,28 +76,7 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-    post:
-      operationId: save
-      description: add a new movie to the list
-      # movie info to be stored
-      parameters:
-        - name: title
-          description: Movie properties
-          in: body
-          required: true
-          schema:
-            $ref: "#/definitions/Movie"
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: "#/definitions/GeneralResponse"
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-  
+            $ref: "#/definitions/ErrorResponse"  
   /movie/{id}:
     # our controller name
     x-swagger-router-controller: movie
@@ -194,6 +180,16 @@ definitions:
     required:
       - title
       - year
+  CaoUser:
+    type: object
+    properties:
+      consultants:
+        type: array
+        items: 
+          type: string
+        description: Id users
+    required:
+      - consultants
   GeneralResponse:
     type: object
     properties:

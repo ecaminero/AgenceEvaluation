@@ -9,20 +9,12 @@ function getAll(req, res, next) {
 	db.find().then(function(values) {
 		res.json({ data: values });
 	});
-	
 }
-//POST /consultant/earnings operationId
-function getEarning(req, res, next) {
-	db.find().then(function(values) {
-		res.json({ movies: values });
-	});
-	
-}
-//POST /movie operationId
+//POST /consultant operationId
 function save(req, res, next) {
 		res.json({ success: db.save(req.body), description: "Movie added to the list!" });
 }
-//GET /movie/{id} operationId
+//GET /consultant/{id} operationId
 function getOne(req, res, next) {
 		var id = req.swagger.params.id.value; //req.swagger contains the path parameters
 		var movie = db.find(id);
@@ -32,7 +24,7 @@ function getOne(req, res, next) {
 		res.status(204).send();
 		}
 }
-//PUT /movie/{id} operationId
+//PUT /consultant/{id} operationId
 function update(req, res, next) {
 		var id = req.swagger.params.id.value; //req.swagger contains the path parameters
 		var movie = req.body;
@@ -43,7 +35,7 @@ function update(req, res, next) {
 		}
 
 }
-//DELETE /movie/{id} operationId
+//DELETE /consultant/{id} operationId
 function delMovie(req, res, next) {
 		var id = req.swagger.params.id.value; //req.swagger contains the path parameters
 		if (db.remove(id)) {
@@ -52,4 +44,12 @@ function delMovie(req, res, next) {
 		res.status(204).send();
 		}
 
+}
+
+//POST /consultant/earnings operationId
+function getEarning(req, res, next) {
+	db.find().then(function(values) {
+		res.json({ data: values });
+	});
+	
 }
