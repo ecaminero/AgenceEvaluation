@@ -18,9 +18,9 @@ consumes:
 produces:
   - application/json
 paths:
-  /movie:
+  /consultant:
     # our controller name
-    x-swagger-router-controller: movie
+    x-swagger-router-controller: consultant
     get:
       operationId: getAll
       description: get the movies list
@@ -29,7 +29,7 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: "#/definitions/GetMoviesListResponse"
+            $ref: "#/definitions/DefaultListResponse"
         default:
           description: Error
           schema:
@@ -54,6 +54,43 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /consultant/earning:
+    # our controller name
+    x-swagger-router-controller: consultant
+    get:
+      operationId: getAll
+      description: get the movies list
+      # define the type of response for Success "200" and Error
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/DefaultListResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      operationId: save
+      description: add a new movie to the list
+      # movie info to be stored
+      parameters:
+        - name: title
+          description: Movie properties
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Movie"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/GeneralResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
   /movie/{id}:
     # our controller name
     x-swagger-router-controller: movie
@@ -124,22 +161,15 @@ paths:
 # complex objects have schema definitions
 definitions:
   # GET /movie successful response
-  GetMoviesListResponse:
+  DefaultListResponse:
     required:
-      - movies
+      - data
     properties:
       # The array of movies
-      movies:
+      data:
         type: array
         items: 
           type: object
-          properties:
-            id:
-              type: string
-            title:
-              type: string
-            year:
-              type: number
   GetMovieResponse:
     required:
       - id
