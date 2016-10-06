@@ -1,0 +1,14 @@
+{
+  "mysql": {
+    "username": "develop",
+    "password": "pass",
+    "database": "agence",
+    "host": "localhost",
+    "dialect": "mysql",
+    "pool": {
+      "maxConnections": 50,
+      "minConnections": 1,
+      "maxIdleTime": 20
+    }
+  }
+}
