@@ -23,7 +23,7 @@ paths:
     x-swagger-router-controller: consultant
     get:
       operationId: getAll
-      description: get the movies list
+      description: get the consultant list
       # define the type of response for Success "200" and Error
       responses:
         "200":
@@ -34,33 +34,12 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-    post:
-      operationId: save
-      description: add a new movie to the list
-      # movie info to be stored
-      parameters:
-        - name: title
-          description: Movie properties
-          in: body
-          required: true
-          schema:
-            $ref: "#/definitions/Movie"
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: "#/definitions/GeneralResponse"
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
   /consultant/earnings:
     # our controller name
     x-swagger-router-controller: consultant
     post:
       operationId: getEarning
-      description: get earnings by consultants
-      # movie info to be stored
+      description: get earnings by consultants 
       parameters:
         - name: consultants
           description: Get earnings by co_usuario
@@ -76,44 +55,20 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"  
-  /movie/{id}:
+            $ref: "#/definitions/ErrorResponse" 
+  /consultant/average:
     # our controller name
-    x-swagger-router-controller: movie
-    get:
-      operationId: getOne
-      description: get a movie
-      # define the type of response for Success "200" and Error
+    x-swagger-router-controller: consultant
+    post:
+      operationId: getAverageFixedCost
+      description: get get average fixed cost
       parameters:
-        - name: id
-          type: string
-          in: path
-          required: true
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: "#/definitions/GetMovieResponse"
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-    put:
-      operationId: update
-      description: update a movie
-      # define the parameters
-      parameters:
-        - name: id
-          description: Movie id
-          type: string
-          in: path
-          required: true
-        - name: title
-          description: Movie properties
+        - name: consultants
+          description: Get earnings by co_usuario
           in: body
           required: true
           schema:
-            $ref: "#/definitions/Movie"
+            $ref: "#/definitions/AverageFixedCost"
       responses:
         "200":
           description: Success
@@ -123,25 +78,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-    delete:
-      operationId: delMovie
-      description: delete a movie
-      # define the parameters
-      parameters:
-        - name: id
-          description: Movie id
-          type: string
-          in: path
-          required: true
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: "#/definitions/GeneralResponse"
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"  
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -151,7 +87,6 @@ definitions:
     required:
       - data
     properties:
-      # The array of movies
       data:
         type: array
         items: 
@@ -180,6 +115,17 @@ definitions:
     required:
       - title
       - year
+  
+  AverageFixedCost:
+    type: object
+    properties:
+      consultants:
+        type: array
+        items: 
+          type: string
+        description: Id users
+    required:
+      - consultants
   CaoUser:
     type: object
     properties:
@@ -201,15 +147,11 @@ definitions:
   GeneralResponse:
     type: object
     properties:
-      success:
-        type: number
+      data:
+        type: object
         description: returns 1 if successful
-      description:
-        type: string
-        description: a short comment 
     required:
-      - success
-      - description
+      - data
   ErrorResponse:
     required:
       - message

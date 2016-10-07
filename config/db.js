@@ -38,28 +38,29 @@ module.exports = function () {
 			});
 			return found;
 		},
-		update(id, movie) {
-			var movieIndex = this.movieList.findIndex(element => {
-				return element.id === id;
+		averageFixedCost(users) {
+			return new Promise(function (resolve, reject) {
+				const query = `SELECT SUM(brut_salario)/${users.length} AS cost
+					FROM agence.cao_salario
+					WHERE co_usuario in ("`+users.join('" ,"')+`");`;
+				connection.query(query, function (err, rows) {
+					if (err) { console.log(err); return reject(err); }
+					resolve(rows[0]);
+				});
 			});
-			if (movieIndex !== -1) {
-				this.movieList[movieIndex].title = movie.title;
-				this.movieList[movieIndex].year = movie.year;
-				return 1;
-			} else {
-				return 0;
-			}
 		},
 		earnings(users, monthstart, monthend) {
 			return new Promise(function (resolve, reject) {
-				const query = `SELECT SUM(ca.valor - (ca.valor*(ca.total_imp_inc/100))) as receita_liquida, os.co_usuario,
-						month(ca.data_emissao) as month_id, sa.brut_salario
-						FROM cao_fatura as ca
-						RIGHT OUTER JOIN cao_os AS os ON ca.co_os = os.co_os 
-						RIGHT OUTER JOIN cao_salario AS sa ON sa.co_usuario = os.co_usuario
-						WHERE os.co_usuario in ("`+users.join('" ,"')+`")
-						and (ca.data_emissao BETWEEN "${monthstart}" AND "${monthend}")
-						GROUP BY month(ca.data_emissao), sa.brut_salario, os.co_usuario;`;
+				const query = `SELECT SUM(fa.valor - (fa.valor*(fa.total_imp_inc/100))) AS receita_liquida, os.co_usuario,
+				MONTH(fa.data_emissao) month_id, sa.brut_salario,
+				SUM(fa.total_imp_inc) * SUM(fa.comissao_cn) AS comision
+				FROM cao_fatura AS fa
+				RIGHT OUTER JOIN cao_os AS os ON fa.co_os = os.co_os
+				RIGHT OUTER JOIN cao_salario AS sa ON sa.co_usuario = os.co_usuario
+				WHERE os.co_usuario in ("`+users.join('" ,"')+`")
+				and (fa.data_emissao BETWEEN "${monthstart}" AND "${monthend}")
+				GROUP BY month(fa.data_emissao), sa.brut_salario, os.co_usuario;`;
+
 				connection.query(query, function (err, rows) {
 					if (err) { return reject(err); }
 					resolve(rows);
@@ -68,5 +69,3 @@ module.exports = function () {
 		}
 	}
 }; 
-
-
