@@ -10,5 +10,6 @@
       "minConnections": 1,
       "maxIdleTime": 20
     }
-  }
+  },
+  "homePage": "//localhost:8080"
 }

@@ -82,7 +82,6 @@ paths:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
-  # GET /movie successful response
   DefaultListResponse:
     required:
       - data
@@ -91,31 +90,6 @@ definitions:
         type: array
         items: 
           type: object
-  GetMovieResponse:
-    required:
-      - id
-      - title
-      - year
-    properties:
-      id:
-        type: string
-      title: 
-        type: string
-      year:
-        type: number
-  Movie:
-    type: object
-    properties:
-      title:
-        type: string
-        description: task object name
-      year:
-        type: number
-        description: task description
-    required:
-      - title
-      - year
-  
   AverageFixedCost:
     type: object
     properties:
