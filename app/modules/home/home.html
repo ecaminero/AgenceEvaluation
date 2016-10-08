@@ -1,4 +1,95 @@
-<div>
-  {{homeCtrl.title}}
-  <a >Go To Party</a>
+<script src="assets/js/chartist.min.js"></script>
+<script src="assets/js/demo.js"></script>
+<div class="col-md-offset-1 col-md-10">
+    <div class="card ">
+        <div class="header">
+            <h4 class="title">Consultores</h4>
+            <p class="category">Lista de consultores</p>
+        </div>
+        <div class="content">
+            <div class="table-full-width">
+                <table class="table" >
+                    <tbody>
+                        <tr ng-repeat="consultant in homeCtrl.consultants">
+                            <td>
+                                <label class="checkbox" id="check-{{$index}}">
+                                    <input type="checkbox" ng-value="consultant.co_usuario" data-toggle="checkbox">
+                                </label>
+                            </td>
+                            <td>{{consultant.no_usuario}}</td>
+                            <td class="td-actions text-right">
+                                <button type="button" rel="tooltip" class="btn btn-info btn-simple btn-xs">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="checkbox" id="other">
+                                    <input type="checkbox" value="" data-toggle="checkbox">
+                                </label>
+                            </td>
+                            <td>Sign contract for "What are conference organizers afraid of?"</td>
+                            <td class="td-actions text-right">
+                                <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="footer">
+                <hr>
+                <div class="stats">
+                    <i class="fa fa-history"></i> Updated 3 minutes ago
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Gráfico de ganancias </h4>
+                <p class="category"></p>
+            </div>
+            <div class="content">
+                <fusioncharts width="400" height="400" type="pie3d" datasource="{{homeCtrl.myDataSource}}"></fusioncharts>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card ">
+            <div class="header">
+                <h4 class="title">2014 Sales</h4>
+                <p class="category">All products including Taxes</p>
+            </div>
+            <div class="content">
+                <div id="chartActivity" class="ct-chart"></div>
+
+                <div class="footer">
+                    <div class="legend">
+                        <i class="fa fa-circle text-info"></i> Tesla Model S
+                        <i class="fa fa-circle text-danger"></i> BMW 5 Series
+                    </div>
+                    <hr>
+                    <div class="stats">
+                        <i class="fa fa-check"></i> Data information certified
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

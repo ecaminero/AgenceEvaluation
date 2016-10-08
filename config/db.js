@@ -6,12 +6,6 @@ const _ = require('lodash');
 
 module.exports = function () {
 	return {
-		movieList: [],
-
-		save(movie) {
-			movie.id = crypto.randomBytes(20).toString('hex'); // fast enough for our purpose
-			return 1;
-		},
 		/*
 		 * Find all users in cao_usuario 
 		 */
@@ -26,17 +20,6 @@ module.exports = function () {
 					resolve(rows);
 				});
 			});
-		},
-		remove(id) {
-			var found = 0;
-			this.movieList = this.movieList.filter(element => {
-				if (element.id === id) {
-					found = 1;
-				} else {
-					return element.id !== id;
-				}
-			});
-			return found;
 		},
 		averageFixedCost(users) {
 			return new Promise(function (resolve, reject) {

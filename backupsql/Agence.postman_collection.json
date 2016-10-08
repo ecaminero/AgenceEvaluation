@@ -1,0 +1,81 @@
+{
+	"id": "cb33b179-0434-b956-90bd-b6cdb5d7bc14",
+	"name": "Agence",
+	"description": "",
+	"order": [],
+	"folders": [
+		{
+			"id": "d70d117f-0dd1-e11f-8c97-df4603c8eebc",
+			"name": "Consultores",
+			"description": "",
+			"order": [
+				"bfe03c53-4226-7a20-fc95-d5b5cecdccb0",
+				"cfdfea9c-a5a3-739e-60d2-7e5dbcdcfbc1",
+				"1be429d8-3caf-db13-cb28-6e52ebc81f90"
+			],
+			"owner": "245487"
+		}
+	],
+	"timestamp": 1475708349263,
+	"owner": "245487",
+	"public": false,
+	"published": false,
+	"requests": [
+		{
+			"id": "1be429d8-3caf-db13-cb28-6e52ebc81f90",
+			"headers": "Content-Type: application/json\n",
+			"url": "{{SERVER}}/api/consultant/average",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1475813024756,
+			"name": "Get Gonsultant average",
+			"description": "",
+			"collectionId": "cb33b179-0434-b956-90bd-b6cdb5d7bc14",
+			"responses": [],
+			"rawModeData": "{\n    \"consultants\": [\"carlos.arruda\", \"carlos.carvalho\", \"contato\"]\n}"
+		},
+		{
+			"id": "bfe03c53-4226-7a20-fc95-d5b5cecdccb0",
+			"headers": "",
+			"url": "{{SERVER}}/api/consultant",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "GET",
+			"data": null,
+			"dataMode": "params",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1475781838879,
+			"name": "Get Gonsultant",
+			"description": "",
+			"collectionId": "cb33b179-0434-b956-90bd-b6cdb5d7bc14",
+			"responses": []
+		},
+		{
+			"id": "cfdfea9c-a5a3-739e-60d2-7e5dbcdcfbc1",
+			"headers": "Content-Type: application/json\n",
+			"url": "{{SERVER}}/api/consultant/earnings",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1475796165511,
+			"name": "Get Gonsultant earnings",
+			"description": "",
+			"collectionId": "cb33b179-0434-b956-90bd-b6cdb5d7bc14",
+			"responses": [],
+			"rawModeData": "{\n    \"consultants\": [\"carlos.arruda\", \"carlos.carvalho\"],\n    \"monthStart\": \"2007-01-1\",\n    \"monthEnd\": \"2007-02-1\"\n}"
+		}
+	]
+}

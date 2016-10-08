@@ -27,6 +27,7 @@ const paths = {
     ngModule: webroot + "modules/**/*.module.js",
     ngRoute: webroot + "modules/**/*.route.js",
     ngController: webroot + "modules/**/*.controller.js",
+    ngServices: webroot + "modules/**/*.service.js",
     script: webroot + "assets/scripts/**/*.js",
     style: webroot + "assets/styles/**/*.css"
 };
@@ -44,6 +45,7 @@ const routeSrc = gulp.src(paths.ngRoute, { read: false });
 const controllerSrc = gulp.src(paths.ngController, { read: false });
 const scriptSrc = gulp.src(paths.script, { read: false });
 const styleSrc = gulp.src(paths.style, { read: false });
+const ngServices = gulp.src(paths.ngServices, { read: false });
 
 function handleError(result){
   console.log("Error Complile", result);
@@ -60,7 +62,7 @@ gulp.task('empty-dist', function() {
 });
 
 gulp.task('compile-js', ['empty-dist'], function() {
-  gulp.src([paths.ngModule, paths.ngRoute, paths.ngController])
+  gulp.src([paths.ngModule, paths.ngRoute, paths.ngController, paths.ngServices])
     .pipe(closure({angular: true}))
     .pipe(ngAnnotate({ add: true, single_quotes: true })).on('error', handleError)
     .pipe(gulp.dest(distSrc))
@@ -78,7 +80,7 @@ gulp.task('build', [], function () {
             optional: 'configuration',
             goes: 'here'
         }))
-        .pipe(inject(series(moduleSrc, routeSrc, controllerSrc, scriptSrc), { ignorePath: '/app' }))
+        .pipe(inject(series(moduleSrc, routeSrc, controllerSrc, scriptSrc, ngServices), { ignorePath: '/app' }))
         .pipe(inject(series(css), { ignorePath: '/app'  }))
         .pipe(gulp.dest(webroot));
 });
@@ -104,7 +106,7 @@ gulp.task('nodemon', function (cb) {
 gulp.task('start', ['build', 'nodemon'], function() {
   browserSync.init(null, {
     proxy: "http://localhost:5000",
-    files: [paths.ngController, paths.ngModule, paths.ngRoute, paths.style],
+    files: [paths.ngController, paths.ngModule, paths.ngRoute, paths.ngServices, paths.style],
     port: 8080
   });
 });
