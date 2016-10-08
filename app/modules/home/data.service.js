@@ -12,6 +12,10 @@
         getConsultants:{
           method: 'GET'
         },
+        getEarnings:{
+          url: `${BASE_API_URI}/api/consultant/earnings`,
+          method: 'POST'
+        },
       });
     return service;
   }

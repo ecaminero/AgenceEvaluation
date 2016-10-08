@@ -24,6 +24,7 @@
     "angular-resource": "1.5.8",
     "ng-table": "^2.0.0",
     "lodash": "^4.16.4",
-    "angular-moment": "^1.0.0"
+    "angular-moment": "^1.0.0",
+    "angular-animate": "^1.5.8"
   }
 }

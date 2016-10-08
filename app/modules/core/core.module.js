@@ -7,6 +7,7 @@
         'ui.bootstrap', 
         'angular-table', 
         'ngResource',
-        'angularMoment'
+        'angularMoment',
+        'ngAnimate'
         ]);
 })();
