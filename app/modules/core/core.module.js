@@ -6,6 +6,7 @@
         'ng-fusioncharts', 
         'ui.bootstrap', 
         'angular-table', 
-        'ngResource'
+        'ngResource',
+        'angularMoment'
         ]);
 })();

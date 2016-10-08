@@ -12,7 +12,7 @@
     $stateProvider
         .state('home', {
           url: '/',
-          templateUrl: '/modules/home/home.html',
+          templateUrl: '/modules/home/templates/home.html',
           controller: 'homeController',
           controllerAs: 'homeCtrl',
       })
