@@ -43,30 +43,28 @@
       pageable: { "refresh": false, "pageSizes": [5, 10], "info": false, "previousNext": true },
     }
 
+    vm.consultantsGridOptions = {
+      dataSource: [],
+      pageable: { "refresh": false, "pageSizes": [5, 10], "info": false, "previousNext": true },
+      columns: [
+        { template: "<input type='checkbox' class='checkbox' ng-click='homeCtrl.toggleSelection(dataItem.co_usuario, $event)' />", width: "40px" },
+        { field: "co_usuario", title: "", hidden: true },
+        { field: "no_usuario", title: "Nombre" },
+        { field: "nu_telefone", title: "Teléfono" }
+      ]
+    };
+
     activate();
     function activate() {
       vm.getConsultants();
-      
+
     }
 
     function getConsultants() {
       dataService.getConsultants().$promise
         .then(function (res) {
           vm.consultants = res.data;
-          vm.gridOptions = {
-            dataSource: {
-              data: vm.consultants,
-              pageSize: 5,
-            },
-            sortable: true,
-            pageable: true,
-            columns: [
-              { template: "<input type='checkbox' class='checkbox' ng-click='homeCtrl.toggleSelection(dataItem.co_usuario, $event)' />", width: "40px" },
-              { field: "co_usuario", title: "", hidden: true },
-              { field: "no_usuario", title: "Nombre" },
-              { field: "nu_telefone", title: "Teléfono" }
-            ]
-          };
+          vm.consultantsGridOptions.dataSource = vm.consultants;
         });
     }
 
@@ -93,9 +91,9 @@
 
     function getRelation() {
       console.log(vm.dateRange);
-      if (_.isEmpty(vm.dateRange.fromDate.string) || _.isEmpty(vm.dateRange.toDate.string) || _.isEmpty(vm.selection)){
-          toaster.pop('warning', "Error", "Debe seleccionar un rango de fechas y al menos un consultor");
-          return ;
+      if (_.isEmpty(vm.dateRange.fromDate.string) || _.isEmpty(vm.dateRange.toDate.string) || _.isEmpty(vm.selection)) {
+        toaster.pop('warning', "Error", "Debe seleccionar un rango de fechas y al menos un consultor");
+        return;
       }
       var data = {
         consultants: vm.selection,
@@ -106,16 +104,16 @@
 
       dataService.getEarnings(data).$promise
         .then(function (response) {
-          generateData(response.data, [], null).then(function (consultants){
+          generateData(response.data, [], null).then(function (consultants) {
             vm.relationsOptions.relations = consultants;
-            if (_.isEmpty(vm.relationsOptions.relations)){
+            if (_.isEmpty(vm.relationsOptions.relations)) {
               toaster.pop('warning', "No hay Registros para las fechas indicadas");
             }
           });
 
         });
     }
-    function getProfit(item){
+    function getProfit(item) {
       return (item.receita_liquida + item.brut_salario) - item.comision;
     }
 
@@ -134,10 +132,10 @@
     }
 
     function generateData(remainder, consultants, deferred) {
-      if(!deferred){ deferred = $q.defer(); }
-      if(_.isEmpty(remainder)) {
-         deferred.resolve(consultants);
-         return deferred.promise; 
+      if (!deferred) { deferred = $q.defer(); }
+      if (_.isEmpty(remainder)) {
+        deferred.resolve(consultants);
+        return deferred.promise;
       }
       var search = _.take(remainder)[0];
       var newList = _.dropWhile(remainder, function (o) { return o.co_usuario === search.co_usuario; });
@@ -149,14 +147,14 @@
       return generateData(newList, consultants, deferred);
     }
 
-    function getMonthByID(id){
-      return moment({month: id}).format('MMMM');
+    function getMonthByID(id) {
+      return moment({ month: id }).format('MMMM');
     }
 
-    function toDateChanged (){ 
+    function toDateChanged() {
       vm.maxDate = new Date(vm.dateRange.toDate.string);
     }
-    function fromDateChanged(){
+    function fromDateChanged() {
       vm.minDate = new Date(vm.dateRange.fromDate.string);
     }
   }

@@ -5,6 +5,7 @@
     <div class="col-md-12">
         <div class="card ">
             <div class="header">
+                {{}}
                 <h4 class="title">Consultores</h4>
                 <p class="category">Rango de fechas</p>
                 <div>
@@ -30,7 +31,13 @@
             </div>
             <div class="clearfix"></div>
             <div class="content table-responsive table-full-width">
-                <kendo-grid options="homeCtrl.gridOptions"></kendo-grid>
+                <div id="listConsultants" kendo-grid="listConsultants" options="lng" k-rebind="lng" 
+                    k-data-source="homeCtrl.consultantsGridOptions.dataSource"
+                    k-sortable="true" 
+                    k-filterable="true" 
+                    k-pageable="homeCtrl.consultantsGridOptions.pageable" 
+                    k-columns="homeCtrl.consultantsGridOptions.columns">
+                </div>
                 <div class="footer">
                     <hr>
                     <div class="stats">
@@ -53,15 +60,24 @@
                 <h4 class="title">Relatório</h4>
             </div>
             <div class="content table-responsive table-full-width">
-                <div id="listNotification" kendo-grid="listNotification" options="lng" k-rebind="lng" k-data-source="homeCtrl.relationsOptions.relations"
-                    k-sortable="true" k-filterable="true" k-pageable="homeCtrl.relationsOptions.pageable" k-columns="homeCtrl.relationsOptions.columns">
+                <div id="listNotification" kendo-grid="listNotification" options="lng" k-rebind="lng" 
+                    k-data-source="homeCtrl.relationsOptions.relations"
+                    k-sortable="true" 
+                    k-filterable="true" 
+                    k-pageable="homeCtrl.relationsOptions.pageable" 
+                    k-columns="homeCtrl.relationsOptions.columns">
                     <div k-detail-template>
                         <kendo-tabstrip>
                             <ul>
                                 <li class="k-state-active">Detalle</li>
                             </ul>
-                            <div id="listRelation" kendo-grid="listRelation" kendo-grid k-data-source="dataItem.relations" k-sortable="true" k-pageable="homeCtrl.insideGridOptions.pageable"
-                                k-columns="homeCtrl.insideGridOptions.columns"></div>
+                            <div id="listRelation" 
+                                kendo-grid="listRelation" 
+                                kendo-grid k-data-source="dataItem.relations" 
+                                k-sortable="true" 
+                                k-pageable="homeCtrl.insideGridOptions.pageable"
+                                k-columns="homeCtrl.insideGridOptions.columns">
+                            </div>
                         </kendo-tabstrip>
                     </div>
                 </div>
