@@ -1,9 +1,9 @@
 {
   "mysql": {
-    "username": "ecaminero",
+    "username": "",
     "password": "",
-    "database": "agence",
-    "host": "localhost",
+    "database": "",
+    "host": "",
     "dialect": "mysql",
     "pool": {
       "maxConnections": 50,
