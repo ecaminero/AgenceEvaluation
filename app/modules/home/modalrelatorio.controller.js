@@ -16,7 +16,7 @@
         monthStart: "2007-01-1",
         monthEnd: "2007-02-1"
     }
-    
+
     vm.myDataSource = {
       chart: {
         caption: "Age profile of website visitors",
@@ -56,11 +56,7 @@
     }
 
     function getEarnings() {
-
-      dataService.getEarnings(vm.data).$promise
-        .then(function (res) {
-          console.log(res)
-        });
+      console.log("21312");
     }
 
     function ok() {

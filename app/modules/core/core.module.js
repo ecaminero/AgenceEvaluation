@@ -8,6 +8,8 @@
         'angular-table', 
         'ngResource',
         'angularMoment',
-        'ngAnimate'
+        'ngAnimate',
+        'kendo.directives',
+        'toaster'
         ]);
 })();

@@ -6,23 +6,57 @@
     .controller('homeController', homeController);
 
   /* @ngInject */
-  function homeController($log, _, dataService, $uibModal) {
+  function homeController($log, _, dataService, $uibModal, toaster, $q, moment) {
     var vm = this;
     vm.getConsultants = getConsultants;
     vm.toggleSelection = toggleSelection;
     vm.showEarnings = showEarnings;
-    vm.showRelatorio = showRelatorio;
+    vm.getRelation = getRelation;
+    vm.getMonthByID = getMonthByID;
+    vm.getProfit = getProfit;
+    vm.showRelationGrid = false;
     vm.selection = [];
+    vm.relationsOptions = {
+      columns: [{ field: 'no_usuario', title: 'Nombre Usuario' }],
+      pageable: { "refresh": false, "pageSizes": [5, 10], "info": false, "previousNext": true },
+      relations: []
+    };
+
+    vm.insideGridOptions = {
+      columns: [
+        { template: "{{homeCtrl.getMonthByID(dataItem.month_id)}}", title: 'Período' },
+        { field: 'receita_liquida', title: 'Receita Líquida' },
+        { field: 'brut_salario', title: 'Custo Fixo' },
+        { field: 'comision', title: 'Comissão' },
+        { template: "{{homeCtrl.getProfit(dataItem)}}", title: 'Lucro' }
+      ],
+      pageable: { "refresh": false, "pageSizes": [5, 10], "info": false, "previousNext": true },
+    }
 
     activate();
     function activate() {
       vm.getConsultants();
+      toaster.pop('success', "title", "text");
     }
 
     function getConsultants() {
       dataService.getConsultants().$promise
         .then(function (res) {
           vm.consultants = res.data;
+          vm.gridOptions = {
+            dataSource: {
+              data: vm.consultants,
+              pageSize: 5,
+            },
+            sortable: true,
+            pageable: true,
+            columns: [
+              { template: "<input type='checkbox' class='checkbox' ng-click='homeCtrl.toggleSelection(dataItem.co_usuario, $event)' />", width: "40px" },
+              { field: "co_usuario", title: "", hidden: true },
+              { field: "no_usuario", title: "Nombre" },
+              { field: "nu_telefone", title: "Teléfono" }
+            ]
+          };
         });
     }
 
@@ -42,24 +76,70 @@
       });
 
       modalInstance.result.then(function (selectedItem) {
-       console.log(selectedItem);
+        console.log(selectedItem);
       }, function () {
         $log.info('Modal dismissed at: ' + new Date());
       });
     }
 
-    function showRelatorio(){
-      console.log("qweqw");
+    function getRelation() {
+      vm.showRelationGrid = true;
+      console.log(vm.selection);
+      var data = {
+        consultants: vm.selection,
+        monthStart: "2007-01-1",
+        monthEnd: "2007-02-1"
+      };
+
+      dataService.getEarnings(data).$promise
+        .then(function (response) {
+          generateData(response.data, [], null).then(function (consultants){
+            vm.relationsOptions.relations = consultants;
+            console.log(vm.relationsOptions.relations)
+          });
+
+        });
+    }
+    function getProfit(item){
+      return (item.receita_liquida + item.brut_salario) - item.comision;
     }
 
-    function toggleSelection(id) {
-      var idx = vm.selection.indexOf(id);
+    function toggleSelection(id, e) {
+      const idx = vm.selection.indexOf(id);
+      var element = $(e.currentTarget),
+        row = element.closest("tr");
+
       if (idx > -1) {
         vm.selection.splice(idx, 1);
+        row.removeClass("k-state-selected");
       } else {
+        row.addClass("k-state-selected");
         vm.selection.push(id);
       }
     }
 
+    function generateData(remainder, consultants, deferred) {
+      if(!deferred){ deferred = $q.defer(); }
+      if(_.isEmpty(remainder)) {
+         deferred.resolve(consultants);
+         return deferred.promise; 
+      }
+      var search = _.take(remainder)[0];
+      var newList = _.dropWhile(remainder, function (o) { return o.co_usuario === search.co_usuario; });
+      consultants.push({
+        co_usuario: search.co_usuario,
+        no_usuario: search.no_usuario,
+        relations: _.filter(remainder, function (o) { return o.co_usuario === search.co_usuario; })
+      });
+      return generateData(newList, consultants, deferred);
+    }
+
+    function getMonthByID(id){
+      return moment({month: id}).format('MMMM');
+    }
   }
 })();
+
+
+
+
