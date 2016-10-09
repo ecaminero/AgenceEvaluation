@@ -1,0 +1,15 @@
+{
+  "mysql": {
+    "username": "ecaminero",
+    "password": "",
+    "database": "agence",
+    "host": "localhost",
+    "dialect": "mysql",
+    "pool": {
+      "maxConnections": 50,
+      "minConnections": 1,
+      "maxIdleTime": 20
+    }
+  },
+  "homePage": "//localhost:8080"
+}
