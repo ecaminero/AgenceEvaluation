@@ -11,6 +11,7 @@
     vm.getAverage = getAverage;
     vm.ok = ok;
     vm.cancel = cancel;
+    vm.emptyChart = false;
     vm.dataSource = {
       chart: {
         caption: "Receta de Participación",
@@ -26,9 +27,9 @@
       },
       data: []
     };
-    console.log()
+    console.log(consultants)
     vm.data = {
-      consultants: ["carlos.arruda", "anapaula.chiodaro", "renato.pereira"],
+      consultants: consultants,
     }
 
     activate();
@@ -40,7 +41,8 @@
       dataService.average(vm.data).$promise
         .then(function (res) {
           if (_.isEmpty(res.data)) {
-            toaster.pop('warning', "No hay Registros para las fechas indicadas");
+            vm.emptyChart = true;
+            return;
           }
           var allSalario = res.allSalario;
           var dataValues = Promise.all(res.data.map(function (data) {
@@ -51,7 +53,6 @@
           })).then(function (response) {
             vm.dataSource.data = response
           });
-
         });
     }
 
@@ -62,8 +63,6 @@
     function cancel() {
       $uibModalInstance.dismiss('cancel');
     };
-
-
   }
 })();
 

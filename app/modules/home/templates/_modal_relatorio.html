@@ -2,7 +2,12 @@
     <h3 class="modal-title" id="modal-title">Gráfico de ganancias!</h3>
 </div>
 <div class="modal-body text-center" id="modal-body">
-    <fusioncharts width="400" height="400" type="pie3d" datasource="{{$ctrl.dataSource}}" ng-cloak></fusioncharts>
+    <div class="alert alert-danger" ng-if="$ctrl.emptyChart">
+        <span><b></b> No hay Registros para los consultores seleccionados </span>
+    </div>
+    <div ng-if="$ctrl.dataSource.data" ng-cloak>
+        <fusioncharts width="400" height="400" type="pie3d" datasource="{{$ctrl.dataSource}}"  ></fusioncharts>
+    </div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-info btn-sm btn-fill pull-right" ng-click="$ctrl.ok()">Cerrar</button>
