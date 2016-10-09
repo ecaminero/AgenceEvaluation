@@ -6,31 +6,12 @@
     .controller('modalRelatorioController', modalRelatorioController);
 
   /* @ngInject */
-  function modalRelatorioController($log, _, dataService, $uibModalInstance, consultants) {
+  function modalRelatorioController($log, $scope, _, dataService, $uibModalInstance, consultants) {
     var vm = this;
     vm.getAverage = getAverage;
     vm.ok = ok;
     vm.cancel = cancel;
     vm.emptyChart = false;
-    vm.dataSource = {
-      chart: {
-        caption: "Receta de Participación",
-        startingangle: "120",
-        showlabels: "0",
-        showlegend: "1",
-        enablemultislicing: "0",
-        slicingdistance: "15",
-        showpercentvalues: "1",
-        showpercentintooltip: "0",
-        plottooltext: "Usuario : $label Ganancia : $datavalue",
-        theme: "fint"
-      },
-      data: []
-    };
-    console.log(consultants)
-    vm.data = {
-      consultants: consultants,
-    }
 
     activate();
     function activate() {
@@ -38,7 +19,7 @@
     }
 
     function getAverage() {
-      dataService.average(vm.data).$promise
+      dataService.average({consultants: consultants}).$promise
         .then(function (res) {
           if (_.isEmpty(res.data)) {
             vm.emptyChart = true;
@@ -51,7 +32,29 @@
               value: (data.brut_salario * 100) / allSalario
             };
           })).then(function (response) {
-            vm.dataSource.data = response
+            FusionCharts.ready(function () {
+              var conversionChart = new FusionCharts({
+                type: 'pie3d',
+                renderAt: 'chart-container',
+                width: "100%",
+                dataSource: {
+                  chart: {
+                    caption: "Receta de Participación",
+                    startingangle: "120",
+                    showlabels: "0",
+                    showlegend: "1",
+                    enablemultislicing: "0",
+                    slicingdistance: "15",
+                    showpercentvalues: "1",
+                    showpercentintooltip: "0",
+                    plottooltext: "Usuario : $label Ganancia : $datavalue",
+                    theme: "fint"
+                  },
+                  data: response
+                }
+              });
+              conversionChart.render();
+            });
           });
         });
     }
