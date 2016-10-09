@@ -40,12 +40,12 @@
         { field: 'comision', title: 'Comissão' },
         { template: "{{homeCtrl.getProfit(dataItem)}}", title: 'Lucro' }
       ],
-      pageable: { "refresh": false, "pageSizes": [5, 10], "info": false, "previousNext": true },
+      pageable: { "refresh": false, "pageSizes": [10], "info": false, "previousNext": true },
     }
 
     vm.consultantsGridOptions = {
       dataSource: [],
-      pageable: { "refresh": false, "pageSizes": [5, 10], "info": false, "previousNext": true },
+      pageable: { "refresh": false, "pageSizes": [10], "info": false, "previousNext": true },
       columns: [
         { template: "<input type='checkbox' class='checkbox' ng-click='homeCtrl.toggleSelection(dataItem.co_usuario, $event)' />", width: "40px" },
         { field: "co_usuario", title: "", hidden: true },
