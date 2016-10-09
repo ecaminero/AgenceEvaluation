@@ -73,7 +73,7 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: "#/definitions/GeneralResponse"
+            $ref: "#/definitions/DefaultListResponse"
         default:
           description: Error
           schema:
@@ -86,6 +86,8 @@ definitions:
     required:
       - data
     properties:
+      allSalario:
+        type: integer
       data:
         type: array
         items: 

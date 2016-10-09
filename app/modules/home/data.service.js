@@ -16,6 +16,10 @@
           url: `${BASE_API_URI}/api/consultant/earnings`,
           method: 'POST'
         },
+        average:{
+          url: `${BASE_API_URI}/api/consultant/average`,
+          method: 'POST'
+        },
       });
     return service;
   }

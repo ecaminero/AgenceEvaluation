@@ -15,7 +15,17 @@
     vm.getMonthByID = getMonthByID;
     vm.getProfit = getProfit;
     vm.showRelationGrid = false;
+    vm.toDateChanged = toDateChanged;
+    vm.fromDateChanged = fromDateChanged;
     vm.selection = [];
+    vm.dateRange = {
+      fromDate: {},
+      toDate: {},
+      config: {
+        start: "year",
+        depth: "year"
+      }
+    };
     vm.relationsOptions = {
       columns: [{ field: 'no_usuario', title: 'Nombre Usuario' }],
       pageable: { "refresh": false, "pageSizes": [5, 10], "info": false, "previousNext": true },
@@ -36,7 +46,7 @@
     activate();
     function activate() {
       vm.getConsultants();
-      toaster.pop('success', "title", "text");
+      
     }
 
     function getConsultants() {
@@ -76,26 +86,31 @@
       });
 
       modalInstance.result.then(function (selectedItem) {
-        console.log(selectedItem);
       }, function () {
         $log.info('Modal dismissed at: ' + new Date());
       });
     }
 
     function getRelation() {
-      vm.showRelationGrid = true;
-      console.log(vm.selection);
+      console.log(vm.dateRange);
+      if (_.isEmpty(vm.dateRange.fromDate.string) || _.isEmpty(vm.dateRange.toDate.string) || _.isEmpty(vm.selection)){
+          toaster.pop('warning', "Error", "Debe seleccionar un rango de fechas y al menos un consultor");
+          return ;
+      }
       var data = {
         consultants: vm.selection,
-        monthStart: "2007-01-1",
-        monthEnd: "2007-02-1"
+        monthStart: moment(vm.dateRange.fromDate.object).format("YYYY-MM-DD"),
+        monthEnd: moment(vm.dateRange.toDate.object).format("YYYY-MM-DD")
       };
+      vm.showRelationGrid = true;
 
       dataService.getEarnings(data).$promise
         .then(function (response) {
           generateData(response.data, [], null).then(function (consultants){
             vm.relationsOptions.relations = consultants;
-            console.log(vm.relationsOptions.relations)
+            if (_.isEmpty(vm.relationsOptions.relations)){
+              toaster.pop('warning', "No hay Registros para las fechas indicadas");
+            }
           });
 
         });
@@ -136,6 +151,13 @@
 
     function getMonthByID(id){
       return moment({month: id}).format('MMMM');
+    }
+
+    function toDateChanged (){ 
+      vm.maxDate = new Date(vm.dateRange.toDate.string);
+    }
+    function fromDateChanged(){
+      vm.minDate = new Date(vm.dateRange.fromDate.string);
     }
   }
 })();

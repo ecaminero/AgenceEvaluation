@@ -23,12 +23,14 @@ module.exports = function () {
 		},
 		averageFixedCost(users) {
 			return new Promise(function (resolve, reject) {
-				const query = `SELECT SUM(brut_salario)/${users.length} AS cost
-					FROM agence.cao_salario
-					WHERE co_usuario in ("`+users.join('" ,"')+`");`;
+				const query = `SELECT brut_salario, us.no_usuario, us.co_usuario
+					FROM cao_salario AS sa
+					RIGHT OUTER JOIN cao_usuario AS us
+					ON us.co_usuario = sa.co_usuario
+					WHERE sa.co_usuario in ("`+users.join('" ,"')+`");`;
 				connection.query(query, function (err, rows) {
 					if (err) { console.log(err); return reject(err); }
-					resolve(rows[0]);
+					resolve(rows);
 				});
 			});
 		},

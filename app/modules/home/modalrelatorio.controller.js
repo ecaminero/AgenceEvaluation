@@ -8,19 +8,12 @@
   /* @ngInject */
   function modalRelatorioController($log, _, dataService, $uibModalInstance, consultants) {
     var vm = this;
-    vm.getEarnings = getEarnings;
+    vm.getAverage = getAverage;
     vm.ok = ok;
     vm.cancel = cancel;
-    vm.data = {
-        consultants: consultants,
-        monthStart: "2007-01-1",
-        monthEnd: "2007-02-1"
-    }
-
-    vm.myDataSource = {
+    vm.dataSource = {
       chart: {
-        caption: "Age profile of website visitors",
-        subcaption: "Last Year",
+        caption: "Receta de Participación",
         startingangle: "120",
         showlabels: "0",
         showlegend: "1",
@@ -28,35 +21,38 @@
         slicingdistance: "15",
         showpercentvalues: "1",
         showpercentintooltip: "0",
-        plottooltext: "Age group : $label Total visit : $datavalue",
+        plottooltext: "Usuario : $label Ganancia : $datavalue",
         theme: "fint"
       },
-      data: [
-        {
-          label: "Teenage",
-          value: "1250400"
-        },
-        {
-          label: "Adult",
-          value: "1463300"
-        },
-        {
-          label: "Mid-age",
-          value: "1050700"
-        },
-        {
-          label: "Senior",
-          value: "491000"
-        }
-      ]
+      data: []
     };
-    activate();
-    function activate() {
-      vm.getEarnings();
+    console.log()
+    vm.data = {
+      consultants: ["carlos.arruda", "anapaula.chiodaro", "renato.pereira"],
     }
 
-    function getEarnings() {
-      console.log("21312");
+    activate();
+    function activate() {
+      vm.getAverage();
+    }
+
+    function getAverage() {
+      dataService.average(vm.data).$promise
+        .then(function (res) {
+          if (_.isEmpty(res.data)) {
+            toaster.pop('warning', "No hay Registros para las fechas indicadas");
+          }
+          var allSalario = res.allSalario;
+          var dataValues = Promise.all(res.data.map(function (data) {
+            return {
+              label: data.no_usuario,
+              value: (data.brut_salario * 100) / allSalario
+            };
+          })).then(function (response) {
+            vm.dataSource.data = response
+          });
+
+        });
     }
 
     function ok() {
@@ -67,5 +63,8 @@
       $uibModalInstance.dismiss('cancel');
     };
 
+
   }
 })();
+
+
