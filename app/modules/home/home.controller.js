@@ -168,6 +168,7 @@
     function generateData(remainder, consultants, deferred) {
       if (!deferred) { deferred = $q.defer(); }
       if (_.isEmpty(remainder)) {
+        consultants = _.uniqBy(consultants, 'co_usuario');
         deferred.resolve(consultants);
         return deferred.promise;
       }
