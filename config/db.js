@@ -13,7 +13,8 @@ module.exports = function () {
 			return new Promise(function (resolve, reject) {
 				const query = `SELECT * FROM cao_usuario as cu 
 					INNER JOIN permissao_sistema AS ps ON ps.co_usuario = cu.co_usuario 
-					WHERE ps.co_sistema=1 and ps.in_ativo = 'S' and ps.co_tipo_usuario in (0,1,2);`;
+					WHERE ps.co_sistema=1 and ps.in_ativo = 'S' and ps.co_tipo_usuario in (0,1,2)
+					ORDER BY cu.no_usuario DESC;`;
 
 				connection.query(query, function (err, rows) {
 					if (err) { return reject(err); }

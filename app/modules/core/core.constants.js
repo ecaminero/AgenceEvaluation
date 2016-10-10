@@ -7,8 +7,6 @@
         .constant("moment", moment)
         .constant("_", window._)
         .constant("pieChart", {
-            caption: "Split of Visitors by Age Group",
-            subCaption: "Last year",
             paletteColors: "#0075c2,#1aaf5d,#f2c500,#f45b00,#8e0000",
             bgColor: "#ffffff",
             showBorder: "0",
@@ -39,7 +37,6 @@
             
         })
         .constant("charByMoths", {
-            "caption": "Comparison of Quarterly Revenue",
             "xAxisname": "Quarter",
             "yAxisName": "Revenues (In USD)",
             "numberPrefix": "$",
