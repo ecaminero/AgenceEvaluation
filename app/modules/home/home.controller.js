@@ -71,6 +71,10 @@
     }
 
     function showEarnings() {
+      if (_.isEmpty(vm.selection)) {
+        toaster.pop('warning', "Error", "Debe seleccionar al menos un consultor");
+        return;
+      }
       var modalInstance = $uibModal.open({
         animation: true,
         ariaLabelledBy: 'modal-title',
@@ -92,6 +96,10 @@
     }
 
     function showPerfomance() {
+      if (_.isEmpty(vm.dateRange.fromDate.string) || _.isEmpty(vm.dateRange.toDate.string) || _.isEmpty(vm.selection)) {
+        toaster.pop('warning', "Error", "Debe seleccionar un rango de fechas y al menos un consultor");
+        return;
+      }
       var modalInstance = $uibModal.open({
         animation: true,
         ariaLabelledBy: 'modal-title',

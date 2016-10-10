@@ -57,7 +57,7 @@
         type: 'mscolumn2d',
         renderAt: 'chart-container',
         width: '500',
-        height: '300',
+        height: '400',
         dataSource: {
           chart: charByMoths,
           categories: [{

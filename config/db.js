@@ -23,13 +23,14 @@ module.exports = function () {
 		},
 		averageFixedCost(users) {
 			return new Promise(function (resolve, reject) {
-				const query = `SELECT brut_salario, us.no_usuario, us.co_usuario
-					FROM cao_salario AS sa
-					RIGHT OUTER JOIN cao_usuario AS us
-					ON us.co_usuario = sa.co_usuario
-					WHERE sa.co_usuario in ("`+users.join('" ,"')+`");`;
+				const query = `SELECT SUM(fa.valor - (fa.valor*(fa.total_imp_inc/100))) AS ganancia, us.no_usuario
+						FROM cao_fatura AS fa
+						RIGHT OUTER JOIN cao_os AS os ON fa.co_os = os.co_os
+						INNER JOIN cao_usuario AS us ON us.co_usuario = os.co_usuario
+						WHERE os.co_usuario in("`+users.join('" ,"')+`")
+						GROUP BY os.co_usuario;`;
 				connection.query(query, function (err, rows) {
-					if (err) { console.log(err); return reject(err); }
+					if (err) { return reject(err); }
 					resolve(rows);
 				});
 			});

@@ -17,21 +17,7 @@ function getAll(req, res, next) {
 function getAverageFixedCost(req, res, next) {
 		var consultants = req.body.consultants;
 		db.averageFixedCost(consultants).then(function (response) {
-			var objectlist = _.clone(response);
-
-			var generateValues = new Promise.map(response, function(o) { 
-				return o.brut_salario 
-			});
-
-			var getSum = new Promise.reduce(generateValues, function(sum, n) {
-					return sum + n;
-			});
-
-			Promise.all([generateValues, getSum]).then(function (res) {
-				objectlist.allSalario = res[1];
-			}).then(function (response) {
-				res.json({ data: objectlist, allSalario: objectlist.allSalario});
-			});
+				res.json({ data: response });
 
 		});
 }
