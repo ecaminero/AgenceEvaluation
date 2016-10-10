@@ -5,7 +5,7 @@ const _ = require('lodash');
 const Promise = require('bluebird');
 
 // Exports all the functions to perform on the db
-module.exports = { getAll, getAverageFixedCost, getEarning };
+module.exports = { getAll, getAverageFixedCost, getEarning, getPerformanceComercial };
 
 //GET /consultant 
 function getAll(req, res, next) {
@@ -45,4 +45,14 @@ function getEarning(req, res, next) {
 		res.json({ data: response });
 	});
 
+}
+
+//POST /consultant/performance 
+function getPerformanceComercial(req, res, next) {
+		var consultants = req.body.consultants;
+		var monthstart = req.body.monthStart;
+		var monthend = req.body.monthEnd;
+		db.performanceComercial(consultants, monthstart, monthend).then(function (response) {
+			res.json({ data: response });
+		});
 }

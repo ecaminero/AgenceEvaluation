@@ -11,6 +11,7 @@
     vm.getConsultants = getConsultants;
     vm.toggleSelection = toggleSelection;
     vm.showEarnings = showEarnings;
+    vm.showPerfomance = showPerfomance;
     vm.getRelation = getRelation;
     vm.getMonthByID = getMonthByID;
     vm.getProfit = getProfit;
@@ -63,6 +64,7 @@
     function getConsultants() {
       dataService.getConsultants().$promise
         .then(function (res) {
+          console.log(res)
           vm.consultants = res.data;
           vm.consultantsGridOptions.dataSource = vm.consultants;
         });
@@ -89,8 +91,32 @@
       });
     }
 
+    function showPerfomance() {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        ariaLabelledBy: 'modal-title',
+        templateUrl: '/modules/home/templates/_modal_perfomance.html',
+        controller: 'modalPerfomanceController',
+        controllerAs: '$ctrl',
+        size: 'lg',
+        resolve: {
+          data: function () {
+            return {
+              consultants: vm.selection,
+              fromDate: moment(vm.dateRange.fromDate.object).format("YYYY-MM-DD"),
+              toDate: moment(vm.dateRange.toDate.object).format("YYYY-MM-DD")
+            };
+          }
+        }
+      });
+
+      modalInstance.result.then(function (selectedItem) {
+      }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+      });
+    }
+
     function getRelation() {
-      console.log(vm.dateRange);
       if (_.isEmpty(vm.dateRange.fromDate.string) || _.isEmpty(vm.dateRange.toDate.string) || _.isEmpty(vm.selection)) {
         toaster.pop('warning', "Error", "Debe seleccionar un rango de fechas y al menos un consultor");
         return;
@@ -157,6 +183,7 @@
     function fromDateChanged() {
       vm.minDate = new Date(vm.dateRange.fromDate.string);
     }
+
   }
 })();
 

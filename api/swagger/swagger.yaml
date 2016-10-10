@@ -78,6 +78,28 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /consultant/performance:
+      # our controller name
+      x-swagger-router-controller: consultant
+      post:
+        operationId: getPerformanceComercial
+        description: get get performance comercial
+        parameters:
+          - name: consultants
+            description: Get earnings by co_usuario
+            in: body
+            required: true
+            schema:
+              $ref: "#/definitions/AverageFixedCost"
+        responses:
+          "200":
+            description: Success
+            schema:
+              $ref: "#/definitions/DefaultListResponse"
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions

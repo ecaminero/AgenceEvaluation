@@ -20,6 +20,10 @@
           url: `${BASE_API_URI}/api/consultant/average`,
           method: 'POST'
         },
+        getPerformance:{
+          url: `${BASE_API_URI}/api/consultant/performance`,
+          method: 'POST'
+        },
       });
     return service;
   }
